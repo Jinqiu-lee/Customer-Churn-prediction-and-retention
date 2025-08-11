@@ -40,7 +40,7 @@ with col1:
         "mlp_model.joblib",  
         ])
 
-    model_path = f"./saved_model/{model_option}"
+    model_path = f"./model/saved_model/{model_option}"
 
     init_config()
 
@@ -364,10 +364,10 @@ with col2:
     ("Logistic", "Random Forest", "XGBoost", "MLP")
 )
     model_paths = {
-    "Logistic": "model/saved_model/logistic_model.joblib",
-    "Random Forest":"model/saved_model/rf_model.joblib",
-    "XGBoost": "model/saved_model/xgb_model.joblib",
-    "MLP": "model/saved_model/mlp_model.joblib",
+    "Logistic": "./model/saved_model/logistic_model.joblib",
+    "Random Forest":"./model/saved_model/rf_model.joblib",
+    "XGBoost": "./model/saved_model/xgb_model.joblib",
+    "MLP": "./model/saved_model/mlp_model.joblib",
 }
     
     model = joblib.load(model_paths[model_choice])

@@ -6,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 from joblib import dump
 
-df = pd.read_csv("/Users/irisvitalee/Documents/ML-AI projects/Project1-Customer Churn/data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
 def preprocess_data(df, save_test_csv=False, save_path="./data/test_data.csv"):
     df['Churn'] = df['Churn'].astype(str).str.strip().map({'Yes': 1, 'No': 0})
