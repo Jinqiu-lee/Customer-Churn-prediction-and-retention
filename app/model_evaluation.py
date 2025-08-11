@@ -59,13 +59,13 @@ with col1:
 
     if model_option == "xgb_model.joblib":
         st.sidebar.header("Tune paramater for xgb_model")
-        max_depth = st.sidebar.slider("Max Depth", 1, 20,5)
+        max_depth = st.sidebar.slider("Max Depth", 1, 20,7)
         n_estimators = st.sidebar.slider("n_estimators", 100,800,500,step=100)
         learning_rate = st.sidebar.slider("Learning Rate",0.001,0.5,0.1)
     elif model_option =="rf_model.joblib":
         st.sidebar.header("Tuning parameters for rf_model")
         max_depth = st.sidebar.slider("Max Depth", 1, 20,5)
-        n_estimators = st.sidebar.slider("n_estimators", 100,800,500,step=100)
+        n_estimators = st.sidebar.slider("n_estimators", 100,1000,800,step=100)
         min_samples_split = st.sidebar.slider("Min Samples Split", 2, 10,3)
 
 
@@ -195,19 +195,46 @@ with col1:
         report_df.index.name = 'Class / Avg'
         st.subheader("Classification Report (Detailed)")
         st.dataframe(report_df)
-    st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
-    with st.expander("Model Performance Analysis"):
+        
+    with st.expander("Model Performance Analysis and Explaination"):
         st.markdown("""
                     - 📉 Precision : How many of the predicted churners are actually churned.
                     - 📈 Recall : How many of actual churners did the model catch.
                     - ✅ **RECALL** is the most important.
                     - ⚖️ Optimize **recall** to make sure the model catch as many churners as possible , **F1-score** as a secondary metric to balance not wrongly flagging loyal customers (precision).
-                    - If recall is above 0.8,and F1-score is around 0.6-0.7,we're doing well.
+                    - If recall is above 0.8,and F1-score is above 0.6, we're doing well.
                     """)
+        
+    st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
+    if model_option == "logistic_model.joblib" and selected_threshold == 0.2:
+        st.write(" 🧠 When **threshold = 0.2**(recall = 0.87,f1-score = 0.61), Logistic Regression model performs the best to detect and predict churn")
+    elif model_option == "xgb_model.joblib" and selected_threshold == 0.3:
+        st.write(" 🧠 When max-depth = 7,n_estimators = 500,learning rate = 0.03,**threshold = 0.3**(recall=0.84,f1-score=0.60),XGBoost model performs the best and balanced,you can tune parameters to get higher recall based on business goal")
+    elif model_option == "rf_model.joblib" and selected_threshold == 0.35:
+        st.write(" 🧠 When max-depth = 5, n_estimators = 800,min-sample-split = 3, **threshold = 0.35**(recall = 0.89,f1-score = 0.60),random forest model performs the best and balanced, you can tune parameters to get higher based on business goal ")
+    elif model_option == "mlp_model.joblib" and selected_threshold == 0.15:
+        st.write(" 🧠 When threshold = 0.15(recall = 0.89, f1-score = 0.60),MLP model performs the best ")
+    
+    data = {
+            "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
+            "Risk Customers ":[0,200,300],
+            "Real Churners Saved":[0,148,252],
+            "Estimated Revenue Saved":["$0","$14,800","$25,200"]
+        }
+    df = pd.DataFrame(data)
+    
+    st.subheader("🕴 Estimated Business Impact")
+    st.markdown("""
+                Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
+                - Save 100s of customers per month(based on the dataset)
+                - Improve revenue predictability (based on the recall result and assume 100$ revenue per customer)
+                    """)
+    st.dataframe(df)
+   
 
     # Feature Importance
     if model_option in ["rf_model.joblib","xgb_model.joblib"]:
-        st.subheader("Feature Importance")
+        st.subheader(f"Feature Importance of {model_option}")
         importance = pd.DataFrame({
             "Feature": X_test.columns,
             "Importance": model.feature_importances_
@@ -218,7 +245,7 @@ with col1:
 
         
     elif model_option in ["logistic_model.joblib"]:
-        st.subheader("Feuature Importance of logistic model")
+        st.subheader("Feature Importance of logistic model")
         importance = model.coef_[0]
         feature_importance = pd.DataFrame({
             'Feature':X_test.columns,
@@ -232,7 +259,7 @@ with col1:
     
         
     else:
-        st.subheader("Feuature Importance of mlp model")
+        st.subheader("Feature Importance of mlp model")
         result = permutation_importance(model, X_test, y_true, n_repeats=10, random_state=42)
         mlp_importance = pd.DataFrame({
             'Feature':X_test.columns,
@@ -387,7 +414,9 @@ with col2:
         else:
             st.success(f"✅  This customer is likely to stay, Churn probability:{prob_single:.2f}")
         
-
+    st.markdown("""
+                
+                """)
 
    
     
