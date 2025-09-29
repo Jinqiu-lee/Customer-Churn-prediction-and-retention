@@ -9,29 +9,14 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import seaborn as sns
 import joblib
-from model.preprocessing import preprocess_data
 
 
 st.header("Data Exploration and Visualization")
 
 df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 raw_data = df.copy()
-processed_data = preprocess_data(df)
 
-train_X = processed_data[3]
-train_y= processed_data[4]
-test_X = processed_data[5]
-test_y = processed_data[6]
-
-X_all = pd.concat([train_X, test_X], axis=0)
-y_all = pd.concat([train_y, test_y], axis=0)
-
-X_all.reset_index(drop=True, inplace=True)
-y_all.reset_index(drop=True, inplace=True)
-
-df_processed = X_all.copy()
-df_processed['Churn'] = y_all
-print(df_processed)
+processed_data = pd.read_csv("./data/preprocessed_data.csv")
 
 raw_data = raw_data.drop(['customerID'],axis=1)
 raw_data['Churn'] = raw_data['Churn'].str.strip()   
@@ -46,15 +31,15 @@ if show_raw:
         
         
 if show_processed:
-        st.write(df_processed)
-        st.write("##### Data Shape:",df_processed.shape)
+        st.write(processed_data)
+        st.write("##### Data Shape:",processed_data.shape)
         c = st.container()
-        correlation = df_processed.corr()
+        correlation = processed_data.corr()
         
         # Filter only columns that correlate with 'Churn' above a threshold (e.g., |corr| > 0.2)
         churn_corr = correlation['Churn'].sort_values(ascending=False)
         high_corr = churn_corr[churn_corr > 0.2].index
-        filterd_corr = df_processed[high_corr].corr()
+        filterd_corr = processed_data[high_corr].corr()
         
         fig ,ax = plt.subplots(figsize =(10,6))
         sns.heatmap(filterd_corr,annot=True,cmap='coolwarm',fmt=".2f",ax=ax)

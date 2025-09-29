@@ -41,12 +41,10 @@ def preprocess_data(df, save_test_csv=False, save_path="./data/test_data.csv"):
     encoder = OneHotEncoder(sparse_output=False,handle_unknown='ignore')
     encoder.fit(df[categorical_cols])
     
-    dump(encoder, 'model/saved_model/encoder.joblib')
     
     encoded_cols = list(encoder.get_feature_names_out(categorical_cols))  
     all_feature_names = list(encoded_cols)+numerical_cols
     
-    dump(all_feature_names,'model/saved_model/encoded_cols.joblib')
     
     train_inputs.loc[:,encoded_cols] = encoder.transform(train_inputs[categorical_cols])
     test_inputs.loc[:,encoded_cols] = encoder.transform(test_inputs[categorical_cols])
@@ -75,7 +73,7 @@ def scaled(save_test_csv=False,save_path="./data/scaled_test_data.csv"):
     
     scaler = MinMaxScaler()
     X_train_scaled_num = scaler.fit(X_train_num)
-    dump(scaler, 'model/saved_model/scaler.joblib')
+
     
     X_train_scaled_num = scaler.transform(X_train_num)
     X_test_scaled_num = scaler.transform(X_test_num)
@@ -103,7 +101,6 @@ def scaled(save_test_csv=False,save_path="./data/scaled_test_data.csv"):
 
 X_scaled_train, X_scaled_test, y_train, y_test = scaled()
 
-dump(X_train.columns.tolist(), "model/saved_model/columns.joblib")
 
 
 # save them to csv file 
@@ -112,6 +109,3 @@ train_df["Churn"] = y_train.values
 
 train_scaled_df = pd.DataFrame(X_scaled_train,columns=num_cols+enc_cols)
 train_scaled_df["Churn"] = y_train.values
-
-train_df.to_csv("./data/preprocessed_train.csv",index=False)
-train_scaled_df.to_csv("./data/preprocessed_scaled_train.csv",index=False)

@@ -13,7 +13,6 @@ from sklearn.model_selection import train_test_split
 print("📂 Current working directory:", os.getcwd())
 
     
-
 model_dict = {
     "logistic": logistic_model,
     "rf": rf_model,
@@ -62,14 +61,13 @@ def train(model_name):
         evaluate_model(model,X_test2,y_test2)
     elif model_name == "rf" or model_name =="xgb":
         evaluate_model(model,X_test,y_test)
-        
-        
-    os.makedirs("saved_model", exist_ok=True)
+          
+    # os.makedirs("saved_model", exist_ok=True)
     
     # dump(X_train.columns.tolist(),"model/columns.joblib")
 
-    dump(model,f"model/saved_model/{model_name}_model.joblib")
-    print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
+    #dump(model,f"model/saved_model/{model_name}_model.joblib")
+    # print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
     
     
 # making the script executable from the command line    

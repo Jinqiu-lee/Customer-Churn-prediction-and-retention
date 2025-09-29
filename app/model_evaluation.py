@@ -4,8 +4,8 @@ import os
 import pandas as pd
 import numpy as np
 import joblib
-from model.preprocessing import preprocess_data,scaled
 from model.train_models import train
+from model.preprocessing import preprocess_data,scaled
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
@@ -26,7 +26,8 @@ warnings.filterwarnings('ignore')
 df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 num_cols, enc_cols,cat_cols,X_train,y_train, X_test,y_test = preprocess_data(df,save_test_csv=True)
 X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
-    
+
+
 col1, col2 = st.columns([2,1])
 
 with col1:
