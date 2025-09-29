@@ -1,3 +1,6 @@
+import os
+os.environ["XDG_CONFIG_HOME"] = os.path.join(os.getcwd(), ".streamlit")
+
 import streamlit as st
 
 st.set_page_config(layout="wide")
