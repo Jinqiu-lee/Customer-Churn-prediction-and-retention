@@ -1,4 +1,5 @@
 FROM python:3.13.5-slim
+ENV XDG_CONFIG_HOME=/home/user/app/.streamlit
 
 WORKDIR /app
 
