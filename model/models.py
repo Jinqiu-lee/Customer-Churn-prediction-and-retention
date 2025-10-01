@@ -7,10 +7,10 @@ import streamlit as st
 
 
 def logistic_model():
-    return LogisticRegression(solver='liblinear', random_state=42)
+    LogisticRegression(solver='liblinear', random_state=42)
 
 def rf_model():
-    return RandomForestClassifier(n_jobs=-1, 
+    RandomForestClassifier(n_jobs=-1, 
                                random_state=42, 
                                n_estimators=st.session_state.model_config["n_estimators"],
                                max_features=10,
@@ -19,10 +19,10 @@ def rf_model():
                                min_impurity_decrease=1e-4)
 
 def xgb_model():
-    return  XGBClassifier(random_state=42,n_jobs=-1,n_estimators=st.session_state.model_config["n_estimators"],max_depth=st.session_state.model_config["max_depth"])
+    XGBClassifier(random_state=42,n_jobs=-1,n_estimators=st.session_state.model_config["n_estimators"],max_depth=st.session_state.model_config["max_depth"])
 
 def mlp_model():
-    return MLPClassifier(
+    MLPClassifier(
     hidden_layer_sizes=(64, 32),  # 2 hidden layers
     activation='relu',
     solver='adam',

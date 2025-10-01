@@ -27,6 +27,26 @@ df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 num_cols, enc_cols,cat_cols,X_train,y_train, X_test,y_test = preprocess_data(df,save_test_csv=True)
 X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
 
+# Load model
+@st.cache_resource
+def load_model(path):
+    return joblib.load(path)
+
+rf_model = load_model("./model/saved_model/rf_model.joblib")
+logistic_model = load_model("./model/saved_model/logistic_model.joblib")
+mlp_model = load_model("./model/saved_model/mlp_model.joblib")
+xgb_model = load_model("./model/saved_model/xgb_model.joblib")
+
+
+# Upload test data 
+@st.cache_data
+def load_data(model_option):
+    if model_option in ["logistic_model.joblib","mlp_model.joblib"]:
+        test_data = pd.read_csv("./data/scaled_test_data.csv")
+    else:
+        test_data = pd.read_csv("./data/test_data.csv")
+    return test_data
+
 
 col1, col2 = st.columns([2,1])
 
@@ -42,16 +62,14 @@ with col1:
         ])
 
     model_path = f"./model/saved_model/{model_option}"
-
-    init_config()
-
-    # Load model
-    @st.cache_resource
-    def load_model(path):
-        return joblib.load(path)
-
     model = load_model(model_path)
     st.success(f"Done Loaded{model_option}")
+
+    #init_config()
+     
+    test_data = load_data(model_option)
+    X_test = test_data.drop("Churn",axis=1)
+    y_true = test_data["Churn"]
 
     max_depth = 5
     n_estimators = 500
@@ -70,47 +88,14 @@ with col1:
         min_samples_split = st.sidebar.slider("Min Samples Split", 2, 10,3)
 
 
-    xgb_params = {
-        "n_estimators": n_estimators,
-        "max_depth": max_depth,
-        "learning_rate":learning_rate,
-    }
-
-    rf_params = {
-        "n_estimators": n_estimators,
-        "max_depth": max_depth,
-        "min_samples_split":min_samples_split,
-    }
-
-        
-
-    # Upload test data 
-    @st.cache_data
-    def load_data():
-        if model_option in ["logistic_model.joblib","mlp_model.joblib"]:
-            test_data = pd.read_csv("./data/scaled_test_data.csv")
-        else:
-            test_data = pd.read_csv("./data/test_data.csv")
-        return test_data
-    test_data = load_data()
-
-    X_test = test_data.drop("Churn",axis=1)
-    y_true = test_data["Churn"]
-    
-
     if model_option == "rf_model.joblib":
-        model = RandomForestClassifier(**rf_params, random_state=42,n_jobs=-1)
-        model.fit(X_train, y_train) 
+        model = rf_model
     elif model_option == "xgb_model.joblib":
-        model = XGBClassifier(**xgb_params, random_state=42,n_jobs=-1)
-        model.fit(X_train, y_train)
+        model = xgb_model
     elif model_option == "logistic_model.joblib":
-        model = LogisticRegression()
-        model.fit(X_scaled_train, y_train)
+        model = logistic_model
     elif model_option == "mlp_model.joblib":
-        model = MLPClassifier(random_state=42)
-        model.fit(X_scaled_train, y_train)
-     
+        model = mlp_model
     
     # Show Evaluation Metrics
     thresholds = np.arange(0.0, 1.0, 0.05)
@@ -209,12 +194,12 @@ with col1:
     st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
     if model_option == "logistic_model.joblib" and selected_threshold == 0.2:
         st.write(" 🧠 When **threshold = 0.2**(recall = 0.87,f1-score = 0.61), Logistic Regression model performs the best to detect and predict churn")
-    elif model_option == "xgb_model.joblib" and selected_threshold == 0.3:
-        st.write(" 🧠 When max-depth = 7,n_estimators = 500,learning rate = 0.03,**threshold = 0.3**(recall=0.84,f1-score=0.60),XGBoost model performs the best and balanced,you can tune parameters to get higher recall based on business goal")
-    elif model_option == "rf_model.joblib" and selected_threshold == 0.35:
-        st.write(" 🧠 When max-depth = 5, n_estimators = 800,min-sample-split = 3, **threshold = 0.35**(recall = 0.89,f1-score = 0.60),random forest model performs the best and balanced, you can tune parameters to get higher based on business goal ")
+    elif model_option == "xgb_model.joblib" and selected_threshold == 0.2:
+        st.write(" 🧠 When max-depth = 7,n_estimators = 500,learning rate = 0.03,**threshold = 0.2**(recall=0.86,f1-score=0.61),XGBoost model performs the best and balanced,you can tune parameters to get higher recall based on business goal")
+    elif model_option == "rf_model.joblib" and selected_threshold == 0.2:
+        st.write(" 🧠 When max-depth = 5, n_estimators = 800,min-sample-split = 3, **threshold = 0.2**(recall = 0.90,f1-score = 0.62),random forest model performs the best and balanced, you can tune parameters to get higher based on business goal ")
     elif model_option == "mlp_model.joblib" and selected_threshold == 0.15:
-        st.write(" 🧠 When threshold = 0.15(recall = 0.89, f1-score = 0.60),MLP model performs the best ")
+        st.write(" 🧠 When threshold = 0.15(recall = 0.88, f1-score = 0.60),MLP model performs the best ")
     
     data = {
             "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
