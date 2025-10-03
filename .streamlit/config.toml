@@ -1,3 +1,6 @@
+[runner]
+python_version = "3.11"
+
 [theme]
 primaryColor = "#FF4B4B"
 backgroundColor = "#FFFFFF"
@@ -10,3 +13,5 @@ headless = true
 enableCORS = false
 enableXsrfProtection = false
 port = 8501
+
+
