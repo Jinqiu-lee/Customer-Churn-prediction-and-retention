@@ -51,8 +51,6 @@ def train(model_name):
     # train model
     model = model_dict[model_name]()
     
-    print(X_scaled_smote.shape, y_train2.shape)
-    
     if model_name == "logistic" or model_name == "mlp":
         model.fit(X_scaled_smote,y_scaled_smote)
     elif model_name == "rf" or model_name =="xgb":
@@ -69,7 +67,7 @@ def train(model_name):
     
     #dump(X_train.columns.tolist(),"model/columns.joblib")
 
-    dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
+    #dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
     # print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
     
     

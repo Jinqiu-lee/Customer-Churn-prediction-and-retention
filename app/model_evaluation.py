@@ -26,7 +26,7 @@ warnings.filterwarnings('ignore')
 df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 num_cols, enc_cols,cat_cols,X_train,y_train, X_test,y_test = preprocess_data(df,save_test_csv=True)
 X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
-"""
+
 # Load model
 @st.cache_resource
 def load_model(path):
@@ -36,8 +36,6 @@ rf_model = load_model("./model/saved_model/rf_model.joblib")
 logistic_model = load_model("./model/saved_model/logistic_model.joblib")
 mlp_model = load_model("./model/saved_model/mlp_model.joblib")
 xgb_model = load_model("./model/saved_model/xgb_model.joblib")
-
-"""
 
 # Upload test data 
 @st.cache_data
@@ -83,19 +81,7 @@ with col1:
     min_samples_split = 2
 
 
-    xgb_params = {
-        "n_estimators": n_estimators,
-        "max_depth": max_depth,
-        "learning_rate":learning_rate,
-    }
-
-    rf_params = {
-        "n_estimators": n_estimators,
-        "max_depth": max_depth,
-        "min_samples_split":min_samples_split,
-    }
-
-        
+ 
 
     # Upload test data 
     @st.cache_data
@@ -125,20 +111,28 @@ with col1:
 
 
     if model_option == "rf_model.joblib":
-        model = RandomForestClassifier(**rf_params, random_state=42,n_jobs=-1)
-        model.fit(X_train, y_train) 
+        model = rf_model
+        # uncomment this if you want to train
+        #model = RandomForestClassifier(**rf_params, random_state=42,n_jobs=-1)
+        #model.fit(X_train, y_train) 
         
     elif model_option == "xgb_model.joblib":
-        model = XGBClassifier(**xgb_params, random_state=42,n_jobs=-1)
-        model.fit(X_train, y_train)
+        model = xgb_model
+        # uncomment this if you want to train
+        #model = XGBClassifier(**xgb_params, random_state=42,n_jobs=-1)
+        #model.fit(X_train, y_train)
         
     elif model_option == "logistic_model.joblib":
-        model = LogisticRegression()
-        model.fit(X_scaled_train, y_train)
+        model = logistic_model
+        # uncomment this if you want to train
+        #model = LogisticRegression()
+        #model.fit(X_scaled_train, y_train)
         
     elif model_option == "mlp_model.joblib":
-        model = MLPClassifier(random_state=42)
-        model.fit(X_scaled_train, y_train)
+        model = mlp_model
+        # uncomment this if you want to train
+        #model = MLPClassifier(random_state=42)
+        #model.fit(X_scaled_train, y_train)
         
     
     # Show Evaluation Metrics
