@@ -20,11 +20,13 @@ model_dict = {
     "mlp":mlp_model,
 }
 
+init_config()
+
 def train(model_name):
-    config = st.session_state.model_config
+   # config = st.session_state.model_config
     if model_name not in model_dict:
          raise ValueError(f"Invalid model name: {model_name}")
-     
+    
      # load data 
     df1 = pd.read_csv("./data/preprocessed_train.csv")
     df2 = pd.read_csv("./data/preprocessed_scaled_train.csv")
@@ -48,12 +50,13 @@ def train(model_name):
 
     # train model
     model = model_dict[model_name]()
-    print(f"Training{model_name}model")
+    
+    print(X_scaled_smote.shape, y_train2.shape)
     
     if model_name == "logistic" or model_name == "mlp":
-        model.fit(X_scaled_smote,y_train2)
+        model.fit(X_scaled_smote,y_scaled_smote)
     elif model_name == "rf" or model_name =="xgb":
-        model.fit(X_train_smote,y_train)
+        model.fit(X_train_smote,y_train_smote)
         
 
     # Evaluate and save 
@@ -62,11 +65,11 @@ def train(model_name):
     elif model_name == "rf" or model_name =="xgb":
         evaluate_model(model,X_test,y_test)
           
-    # os.makedirs("saved_model", exist_ok=True)
+    #os.makedirs("./model/new_saved_model", exist_ok=True)
     
-    # dump(X_train.columns.tolist(),"model/columns.joblib")
+    #dump(X_train.columns.tolist(),"model/columns.joblib")
 
-    #dump(model,f"model/saved_model/{model_name}_model.joblib")
+    dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
     # print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
     
     

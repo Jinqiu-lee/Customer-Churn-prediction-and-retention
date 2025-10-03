@@ -14,7 +14,7 @@ def saved_model(model,path):
 
 
 def evaluate_model(model,X,y,name=''):
-    config = st.session_state.model_config
+    #config = st.session_state.model_config
     y_pred = model.predict(X)
     accuracy = accuracy_score(y,y_pred)
     print("Accuracy:{:.2f}%".format(accuracy*100))

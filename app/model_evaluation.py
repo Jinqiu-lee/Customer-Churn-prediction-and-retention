@@ -26,7 +26,7 @@ warnings.filterwarnings('ignore')
 df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 num_cols, enc_cols,cat_cols,X_train,y_train, X_test,y_test = preprocess_data(df,save_test_csv=True)
 X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
-
+"""
 # Load model
 @st.cache_resource
 def load_model(path):
@@ -37,6 +37,7 @@ logistic_model = load_model("./model/saved_model/logistic_model.joblib")
 mlp_model = load_model("./model/saved_model/mlp_model.joblib")
 xgb_model = load_model("./model/saved_model/xgb_model.joblib")
 
+"""
 
 # Upload test data 
 @st.cache_data
@@ -61,7 +62,12 @@ with col1:
         "mlp_model.joblib",  
         ])
 
-    model_path = f"./model/saved_model/{model_option}"
+    model_path = f"./model/new_saved_model/{model_option}"
+    
+     # Load model
+    @st.cache_resource
+    def load_model(path):
+        return joblib.load(path)
     model = load_model(model_path)
     st.success(f"Done Loaded{model_option}")
 
@@ -76,6 +82,36 @@ with col1:
     learning_rate = 0.1
     min_samples_split = 2
 
+
+    xgb_params = {
+        "n_estimators": n_estimators,
+        "max_depth": max_depth,
+        "learning_rate":learning_rate,
+    }
+
+    rf_params = {
+        "n_estimators": n_estimators,
+        "max_depth": max_depth,
+        "min_samples_split":min_samples_split,
+    }
+
+        
+
+    # Upload test data 
+    @st.cache_data
+    def load_data():
+        if model_option in ["logistic_model.joblib","mlp_model.joblib"]:
+            test_data = pd.read_csv("./data/scaled_test_data.csv")
+        else:
+            test_data = pd.read_csv("./data/test_data.csv")
+        return test_data
+    test_data = load_data()
+
+    X_test = test_data.drop("Churn",axis=1)
+    y_true = test_data["Churn"]
+    
+
+
     if model_option == "xgb_model.joblib":
         st.sidebar.header("Tune paramater for xgb_model")
         max_depth = st.sidebar.slider("Max Depth", 1, 20,7)
@@ -89,13 +125,21 @@ with col1:
 
 
     if model_option == "rf_model.joblib":
-        model = rf_model
+        model = RandomForestClassifier(**rf_params, random_state=42,n_jobs=-1)
+        model.fit(X_train, y_train) 
+        
     elif model_option == "xgb_model.joblib":
-        model = xgb_model
+        model = XGBClassifier(**xgb_params, random_state=42,n_jobs=-1)
+        model.fit(X_train, y_train)
+        
     elif model_option == "logistic_model.joblib":
-        model = logistic_model
+        model = LogisticRegression()
+        model.fit(X_scaled_train, y_train)
+        
     elif model_option == "mlp_model.joblib":
-        model = mlp_model
+        model = MLPClassifier(random_state=42)
+        model.fit(X_scaled_train, y_train)
+        
     
     # Show Evaluation Metrics
     thresholds = np.arange(0.0, 1.0, 0.05)
@@ -337,9 +381,9 @@ with col2:
     input_df = pd.DataFrame([full_input_dict])
     
     # Load encoder ,model, and expected columns
-    encoder = joblib.load("model/saved_model/encoder.joblib")
-    scaler = joblib.load("model/saved_model/scaler.joblib")
-    expected_cols = joblib.load("model/saved_model/encoded_cols.joblib")
+    encoder = joblib.load("model/new_saved_model/encoder.joblib")
+    scaler = joblib.load("model/new_saved_model/scaler.joblib")
+    expected_cols = joblib.load("model/new_saved_model/encoded_cols.joblib")
     
     X_cat = input_df.select_dtypes(include='object')
     X_num = input_df.select_dtypes(exclude='object')
@@ -377,10 +421,10 @@ with col2:
     ("Logistic", "Random Forest", "XGBoost", "MLP")
 )
     model_paths = {
-    "Logistic": "./model/saved_model/logistic_model.joblib",
-    "Random Forest":"./model/saved_model/rf_model.joblib",
-    "XGBoost": "./model/saved_model/xgb_model.joblib",
-    "MLP": "./model/saved_model/mlp_model.joblib",
+    "Logistic": "./model/new_saved_model/logistic_model.joblib",
+    "Random Forest":"./model/new_saved_model/rf_model.joblib",
+    "XGBoost": "./model/new_saved_model/xgb_model.joblib",
+    "MLP": "./model/new_saved_model/mlp_model.joblib",
 }
     
     model = joblib.load(model_paths[model_choice])
