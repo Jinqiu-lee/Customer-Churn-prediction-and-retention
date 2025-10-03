@@ -232,7 +232,7 @@ with col1:
     st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
     if model_option == "logistic_model.joblib" and selected_threshold == 0.2:
         st.write(" 🧠 When **threshold = 0.2**(recall = 0.87,f1-score = 0.61), Logistic Regression model performs the best to detect and predict churn")
-    elif model_option == "xgb_model.joblib" and selected_threshold == 0.2:
+    elif model_option == "xgb_model.joblib" and selected_threshold == 0.35:
         st.write(" 🧠 When max-depth = 7,n_estimators = 500,learning rate = 0.03,**threshold = 0.2**(recall=0.86,f1-score=0.61),XGBoost model performs the best and balanced,you can tune parameters to get higher recall based on business goal")
     elif model_option == "rf_model.joblib" and selected_threshold == 0.2:
         st.write(" 🧠 When max-depth = 5, n_estimators = 800,min-sample-split = 3, **threshold = 0.2**(recall = 0.90,f1-score = 0.62),random forest model performs the best and balanced, you can tune parameters to get higher based on business goal ")
