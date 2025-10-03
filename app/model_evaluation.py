@@ -32,10 +32,10 @@ X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
 def load_model(path):
     return joblib.load(path)
 
-rf_model = load_model("./model/saved_model/rf_model.joblib")
-logistic_model = load_model("./model/saved_model/logistic_model.joblib")
-mlp_model = load_model("./model/saved_model/mlp_model.joblib")
-xgb_model = load_model("./model/saved_model/xgb_model.joblib")
+rf_model = load_model("./model/new_saved_model/rf_model.joblib")
+logistic_model = load_model("./model/new_saved_model/logistic_model.joblib")
+mlp_model = load_model("./model/new_saved_model/mlp_model.joblib")
+xgb_model = load_model("./model/new_saved_model/xgb_model.joblib")
 
 # Upload test data 
 @st.cache_data
