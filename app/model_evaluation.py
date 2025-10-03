@@ -1,24 +1,13 @@
 import streamlit as st
-from sklearn import datasets
 import os
 import pandas as pd
 import numpy as np
 import joblib
-from model.train_models import train
 from model.preprocessing import preprocess_data,scaled
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score,classification_report,confusion_matrix,precision_score,recall_score,f1_score
+from sklearn.metrics import classification_report,confusion_matrix,precision_score,recall_score,f1_score
 from sklearn.inspection import permutation_importance
-from config import init_config,reset_config
-from sklearn.neural_network import MLPClassifier
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -70,7 +59,7 @@ with col1:
     st.success(f"Done Loaded{model_option}")
 
     #init_config()
-     
+    
     test_data = load_data(model_option)
     X_test = test_data.drop("Churn",axis=1)
     y_true = test_data["Churn"]
@@ -112,27 +101,15 @@ with col1:
 
     if model_option == "rf_model.joblib":
         model = rf_model
-        # uncomment this if you want to train
-        #model = RandomForestClassifier(**rf_params, random_state=42,n_jobs=-1)
-        #model.fit(X_train, y_train) 
         
     elif model_option == "xgb_model.joblib":
         model = xgb_model
-        # uncomment this if you want to train
-        #model = XGBClassifier(**xgb_params, random_state=42,n_jobs=-1)
-        #model.fit(X_train, y_train)
         
     elif model_option == "logistic_model.joblib":
         model = logistic_model
-        # uncomment this if you want to train
-        #model = LogisticRegression()
-        #model.fit(X_scaled_train, y_train)
         
     elif model_option == "mlp_model.joblib":
         model = mlp_model
-        # uncomment this if you want to train
-        #model = MLPClassifier(random_state=42)
-        #model.fit(X_scaled_train, y_train)
         
     
     # Show Evaluation Metrics

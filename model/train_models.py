@@ -34,9 +34,9 @@ def train(model_name):
     # num_cols, enc_cols,cat_cols,X_train,y_train, X_test,y_test = preprocess_data(df,save_test_csv=True)
     # X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
     
-    X = df1
+    X = df1.drop("Churn",axis=1)
     y = df1["Churn"]
-    scaled_X = df2
+    scaled_X = df2.drop("Churn",axis=1)
     scaled_y= df2["Churn"]
     
     
@@ -67,7 +67,7 @@ def train(model_name):
     
     #dump(X_train.columns.tolist(),"model/columns.joblib")
 
-    #dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
+    dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
     # print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
     
     
