@@ -68,24 +68,7 @@ with col1:
     n_estimators = 500
     learning_rate = 0.1
     min_samples_split = 2
-
-
- 
-
-    # Upload test data 
-    @st.cache_data
-    def load_data():
-        if model_option in ["logistic_model.joblib","mlp_model.joblib"]:
-            test_data = pd.read_csv("./data/scaled_test_data.csv")
-        else:
-            test_data = pd.read_csv("./data/test_data.csv")
-        return test_data
-    test_data = load_data()
-
-    X_test = test_data.drop("Churn",axis=1)
-    y_true = test_data["Churn"]
     
-
 
     if model_option == "xgb_model.joblib":
         st.sidebar.header("Tune paramater for xgb_model")
@@ -119,7 +102,7 @@ with col1:
     f1s = []
    
     if model_option in ["logistic_model.joblib","mlp_model.joblib"]:
-        y_probs = model.predict_proba(X_scaled_test)[:,1] # get probability of class 1
+        y_probs = model.predict_proba(X_test)[:,1] # get probability of class 1
     
         for t in thresholds:
             y_pred = (y_probs >= t).astype(int)
@@ -207,8 +190,8 @@ with col1:
                     """)
         
     st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
-    if model_option == "logistic_model.joblib" and selected_threshold == 0.2:
-        st.write(" 🧠 When **threshold = 0.2**(recall = 0.87,f1-score = 0.61), Logistic Regression model performs the best to detect and predict churn")
+    if model_option == "logistic_model.joblib" and selected_threshold == 0.3:
+        st.write(" 🧠 When **threshold = 0.2**(recall = 0.94,f1-score = 0.60), Logistic Regression model performs the best to detect and predict churn")
     elif model_option == "xgb_model.joblib" and selected_threshold == 0.35:
         st.write(" 🧠 When max-depth = 7,n_estimators = 500,learning rate = 0.03,**threshold = 0.2**(recall=0.86,f1-score=0.61),XGBoost model performs the best and balanced,you can tune parameters to get higher recall based on business goal")
     elif model_option == "rf_model.joblib" and selected_threshold == 0.2:

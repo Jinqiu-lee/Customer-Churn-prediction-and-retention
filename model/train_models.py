@@ -34,11 +34,10 @@ def train(model_name):
     # num_cols, enc_cols,cat_cols,X_train,y_train, X_test,y_test = preprocess_data(df,save_test_csv=True)
     # X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
     
-    X = df1.drop("Churn",axis=1)
-    y = df1["Churn"]
-    scaled_X = df2.drop("Churn",axis=1)
+    X = df1.drop('Churn',axis=1)
+    y = df1['Churn']
+    scaled_X = df2.drop('Churn',axis=1)
     scaled_y= df2["Churn"]
-    
     
     X_train,X_test,y_train, y_test = train_test_split(X,y,test_size=0.2,stratify=y,random_state=42)
     X_train2,X_test2,y_train2, y_test2 = train_test_split(scaled_X,scaled_y,test_size=0.2,stratify=y,random_state=42)
