@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
-from joblib import dump
 
 df = pd.read_csv("./data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 

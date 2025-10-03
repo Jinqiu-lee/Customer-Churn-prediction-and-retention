@@ -2,9 +2,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.neural_network import MLPClassifier
-from config import reset_config,init_config
 import streamlit as st
-
 
 def logistic_model():
     return LogisticRegression(solver='liblinear', random_state=42)

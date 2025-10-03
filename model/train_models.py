@@ -1,12 +1,10 @@
 import argparse
-import streamlit as st
 import os
 import pandas as pd
 from joblib import dump
 from model.models import logistic_model, rf_model, xgb_model,mlp_model
-from model.preprocessing import preprocess_data,scaled
 from model.model_utils import evaluate_model
-from config import reset_config,init_config
+from config import init_config
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 
