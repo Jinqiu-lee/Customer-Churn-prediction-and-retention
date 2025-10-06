@@ -7,6 +7,7 @@ from model.model_utils import evaluate_model
 from config import init_config
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
 
 print("📂 Current working directory:", os.getcwd())
 
@@ -48,10 +49,33 @@ def train(model_name):
     # train model
     model = model_dict[model_name]()
     
+    # GridSearchCV for xgboost tuning and rf_model
+
+    params_xgb = {
+    'max_depth':[3,8],
+    'n_estimators':[200,1000],
+    'learning_rate':[0.001,0.5],
+    'scale_pos_weight':[1,5,10]
+}
+    params_rf = {
+        'min_samples_split':[],
+        'n_estimators':[200,1000],
+        'max_depth':[3,8],
+        'scale_pos_weight':[1,5,10]  
+    }
+    
+
     if model_name == "logistic" or model_name == "mlp":
         model.fit(X_scaled_smote,y_scaled_smote)
-    elif model_name == "rf" or model_name =="xgb":
-        model.fit(X_train_smote,y_train_smote)
+    elif model_name =="xgb":
+        model = GridSearchCV(model,params_xgb,scoring='f1')
+        for i, params in enumerate(model.cv_results_['params']):
+            model.fit(X_train_smote,y_train_smote)
+           
+    elif model_name == "rf":
+        model = GridSearchCV(model,params_rf,scoring='f1')
+        for i, params in enumerate(model.cv_results_['params']):
+            model.fit(X_train_smote,y_train_smote)
         
 
     # Evaluate and save 
@@ -61,8 +85,6 @@ def train(model_name):
         evaluate_model(model,X_test,y_test)
           
     #os.makedirs("./model/new_saved_model", exist_ok=True)
-    
-    #dump(X_train.columns.tolist(),"model/columns.joblib")
 
     dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
     # print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
