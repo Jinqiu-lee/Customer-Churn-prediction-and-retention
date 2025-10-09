@@ -10,14 +10,17 @@ def logistic_model():
 def rf_model():
     return RandomForestClassifier(n_jobs=-1, 
                                random_state=42, 
-                               n_estimators=st.session_state.model_config["n_estimators"],
-                               max_features=10,
-                               max_depth=st.session_state.model_config["max_depth"],
-                               min_samples_split=st.session_state.model_config["min_samples_split"],
+                               #n_estimators=st.session_state.model_config["n_estimators"],
+                               #max_features=10,
+                               #max_depth=st.session_state.model_config["max_depth"],
+                               #min_samples_split=st.session_state.model_config["min_samples_split"],
                                min_impurity_decrease=1e-4)
 
 def xgb_model():
-    return XGBClassifier(random_state=42,n_jobs=-1,n_estimators=st.session_state.model_config["n_estimators"],max_depth=st.session_state.model_config["max_depth"])
+    return XGBClassifier(random_state=42,n_jobs=-1,eval_metric='logloss',
+                         #n_estimators=st.session_state.model_config["n_estimators"],
+                         #max_depth=st.session_state.model_config["max_depth"]
+                        )
 
 def mlp_model():
     return MLPClassifier(

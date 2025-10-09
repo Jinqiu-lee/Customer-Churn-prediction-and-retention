@@ -68,18 +68,6 @@ with col1:
     n_estimators = 500
     learning_rate = 0.1
     min_samples_split = 2
-    
-
-    if model_option == "xgb_model.joblib":
-        st.sidebar.header("Tune paramater for xgb_model")
-        max_depth = st.sidebar.slider("Max Depth", 1, 20,7)
-        n_estimators = st.sidebar.slider("n_estimators", 100,800,500,step=100)
-        learning_rate = st.sidebar.slider("Learning Rate",0.001,0.5,0.1)
-    elif model_option =="rf_model.joblib":
-        st.sidebar.header("Tuning parameters for rf_model")
-        max_depth = st.sidebar.slider("Max Depth", 1, 20,5)
-        n_estimators = st.sidebar.slider("n_estimators", 100,1000,800,step=100)
-        min_samples_split = st.sidebar.slider("Min Samples Split", 2, 10,3)
 
 
     if model_option == "rf_model.joblib":
@@ -191,13 +179,13 @@ with col1:
         
     st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
     if model_option == "logistic_model.joblib" and selected_threshold == 0.3:
-        st.write(" 🧠 When **threshold = 0.2**(recall = 0.94,f1-score = 0.60), Logistic Regression model performs the best to detect and predict churn")
-    elif model_option == "xgb_model.joblib" and selected_threshold == 0.35:
-        st.write(" 🧠 When max-depth = 7,n_estimators = 500,learning rate = 0.03,**threshold = 0.2**(recall=0.86,f1-score=0.61),XGBoost model performs the best and balanced,you can tune parameters to get higher recall based on business goal")
-    elif model_option == "rf_model.joblib" and selected_threshold == 0.2:
-        st.write(" 🧠 When max-depth = 5, n_estimators = 800,min-sample-split = 3, **threshold = 0.2**(recall = 0.90,f1-score = 0.62),random forest model performs the best and balanced, you can tune parameters to get higher based on business goal ")
-    elif model_option == "mlp_model.joblib" and selected_threshold == 0.15:
-        st.write(" 🧠 When threshold = 0.15(recall = 0.88, f1-score = 0.60),MLP model performs the best ")
+        st.write(" 🧠 When **threshold = 0.2**(recall = 0.94,f1-score = 0.60 for class 1 - churn), **Logistic Regression Model ** performs the best to detect and predict churn!")
+    elif model_option == "xgb_model.joblib" and selected_threshold == 0.45:
+        st.write(" 🧠 When **threshold = 0.45**(recall=0.89,f1-score=0.60 for class 1 - churn), **XGBoost Model** performs the best and balanced to detect churn !")
+    elif model_option == "rf_model.joblib" and selected_threshold == 0.25:
+        st.write(" 🧠 When **threshold = 0.25**(recall = 0.91,f1-score = 0.61 for class 1-churn),**Random Forest Model** performs the best to detect churn!")
+    elif model_option == "mlp_model.joblib" and selected_threshold == 0.3:
+        st.write(" 🧠 When threshold = 0.2(recall = 0.85, f1-score = 0.60 for class 1 - churn),**MLP Model** performs the best ! ")
     
     data = {
             "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
@@ -263,10 +251,11 @@ with col1:
                        - InternetService_Fiber optic(0.31)
                        - PaymentMethod_Eletronic check(0.30)
                     - It means the customers with **Month-to-month contract**,**Fiber optic without online security & tech suopport**,**Eletronic check payment**are most likely to churn 
-                    - 2. Logistic / Random Forest / MLP  ➡️ top features: tenure, totalcharges 
+                    - 2. **Logistic / MLP**  ➡️ top features: tenure, totalcharges 
                        - Good for long-term customers for trend detection 
                        - Good for customers where tenure and billing history are strong churn signals ,combine with dependants and internet services
-                    - 3. XGBoost ➡️ top features: Contract_Month-to-month, InternetService_Fiber optic
+                    - 3. **Random Forest** ➡️ top features: Contract_Month-to-month,OnlineSecurity_No,TechSupport_No,
+                    - 4. **XGBoost** ➡️ top features: Contract_Month-to-month, InternetService_Fiber optic,TechSupport_No
                        - Better for behavior-pattern-based churn detection and monthly contract analysis
                        - Better for New customers with little tenure data
                     """)
@@ -359,14 +348,17 @@ with col2:
     
     contract_type = 1 if user_inputs['Contract'] == 'Month-to-month' else 0
     internet_service = 1 if user_inputs['InternetService'] == 'Fiber optic' else 0
+    techsupport_and_onlinesecurity_no = 1 if user_inputs['OnlineSecurity'] == 'No' and user_inputs['TechSupport'] == 'No' else 0
 
-    
-    if contract_type == 1 or internet_service == 1:
-        recommended_model = "XGBoost"
+
+    if contract_type == 1 and internet_service == 1 and techsupport_and_onlinesecurity_no == 1:
+        recommended_model = "Random Forest" 
+    elif contract_type == 1:
+        recommended_model = "XGBoost" 
     elif user_inputs['tenure'] < 12 or user_inputs['TotalCharges'] < 500:
         recommended_model = "Logistic"
     else:
-        recommended_model = "Random Forest"
+        recommended_model = "MLP (Neutral Network)"
     st.info(f"Based on this customer's profile, we recommend using the **{recommended_model}** model.")
 
     
@@ -388,7 +380,7 @@ with col2:
         prob = model.predict_proba(X_df)[0][1]
         prob_single = model.predict_proba(X_df)[:,1][0]
         
-        thresholds = 0.4
+        thresholds = 0.3
         
         # Predict with custom threshold
         pred_single = (prob_single >= thresholds).astype(int)
@@ -398,9 +390,6 @@ with col2:
         else:
             st.success(f"✅  This customer is likely to stay, Churn probability:{prob_single:.2f}")
         
-    st.markdown("""
-                
-                """)
 
    
     

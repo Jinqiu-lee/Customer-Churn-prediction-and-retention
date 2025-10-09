@@ -8,6 +8,10 @@ from config import init_config
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer, f1_score, recall_score
+from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
 
 print("📂 Current working directory:", os.getcwd())
 
@@ -52,32 +56,50 @@ def train(model_name):
     # GridSearchCV for xgboost tuning and rf_model
 
     params_xgb = {
-    'max_depth':[3,8],
-    'n_estimators':[200,1000],
-    'learning_rate':[0.001,0.5],
+    'max_depth':[7],
+    'n_estimators':[800],
+    'learning_rate':[0.01],
     'scale_pos_weight':[1,5,10]
 }
     params_rf = {
-        'min_samples_split':[],
-        'n_estimators':[200,1000],
-        'max_depth':[3,8],
-        'scale_pos_weight':[1,5,10]  
+        'min_samples_split':[4],
+        'n_estimators':[800],
+        'max_depth':[7],
+        'class_weight':['balanced',None]
     }
     
+    scoring = {
+             'f1': make_scorer(f1_score),
+             'recall': make_scorer(recall_score)
+             }
 
     if model_name == "logistic" or model_name == "mlp":
         model.fit(X_scaled_smote,y_scaled_smote)
-    elif model_name =="xgb":
-        model = GridSearchCV(model,params_xgb,scoring='f1')
-        for i, params in enumerate(model.cv_results_['params']):
-            model.fit(X_train_smote,y_train_smote)
-           
-    elif model_name == "rf":
-        model = GridSearchCV(model,params_rf,scoring='f1')
-        for i, params in enumerate(model.cv_results_['params']):
-            model.fit(X_train_smote,y_train_smote)
         
-
+    if model_name =="xgb":
+        grid = GridSearchCV(model,params_xgb,scoring=scoring,refit="f1",verbose=2, n_jobs=-1)
+        grid.fit(X_train_smote,y_train_smote)
+        
+        results_df = pd.DataFrame(grid.cv_results_)[['mean_test_f1','mean_test_recall', 'params']]
+        filtered = results_df[results_df['mean_test_f1']>=0.6]
+        
+        if not filtered.empty:
+            best_row = filtered.loc[filtered['mean_test_recall'].idxmax()]
+            best_params = best_row['params']
+            best_model_xgb = XGBClassifier(**best_params,random_state=42,n_jobs=-1,eval_metric='logloss')
+            best_model_xgb.fit(X_train_smote,y_train_smote)
+            model = best_model_xgb
+        
+         
+    if model_name == "rf":
+        grid = GridSearchCV(model,params_rf,scoring="recall",verbose=2, n_jobs=-1)
+        grid.fit(X_train_smote,y_train_smote)
+        
+        results_df = pd.DataFrame(grid.cv_results_)[['mean_test_score', 'params']]
+        best_model_rf = grid.best_estimator_
+        model = best_model_rf
+ 
+        
     # Evaluate and save 
     if model_name == "logistic" or model_name =="mlp":
         evaluate_model(model,X_test2,y_test2)
