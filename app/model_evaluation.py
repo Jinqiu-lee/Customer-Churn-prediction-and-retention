@@ -375,15 +375,21 @@ with col2:
     
     model = joblib.load(model_paths[model_choice])
        
+    thresholds = {"Logistic":0.3,
+                  "Random Forest":0.25,
+                  "XGBoost":0.45,
+                  "MLP":0.25}
+        
+    select_threshold = thresholds[model_choice]
+    
     if st.button("Predict Churn"):
         prediction = model.predict(X_df)[0]
         prob = model.predict_proba(X_df)[0][1]
         prob_single = model.predict_proba(X_df)[:,1][0]
         
-        thresholds = 0.3
         
         # Predict with custom threshold
-        pred_single = (prob_single >= thresholds).astype(int)
+        pred_single = (prob_single >= select_threshold).astype(int)
         st.write(f"**Selected Model:** {model_choice}")
         if pred_single.any() == 1:
             st.error(f"⚠️ This customer is likely to churn , Churn probability :{prob_single:.2f}")
