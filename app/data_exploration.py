@@ -23,7 +23,7 @@ raw_data['Churn'] = raw_data['Churn'].str.strip()
 raw_data['Churn'] = raw_data['Churn'].map({'Yes':1,'No':0}) 
 
 show_raw = st.checkbox("Show Raw Data")  
-show_processed = st.checkbox("Show Processed Data and EDA conclusion")
+show_processed = st.checkbox("Show Processed Data ")
 
 if show_raw:
     st.dataframe(raw_data) 
@@ -304,6 +304,7 @@ with c.expander(" 🔍 Insights and Strategies for Customers with or without Par
                 """)
 
 
+
 c = st.container()
 correlation = processed_data.corr()
         
@@ -314,8 +315,10 @@ filterd_corr = processed_data[high_corr].corr()
 
 fig ,ax = plt.subplots(figsize =(10,6))
 sns.heatmap(filterd_corr,annot=True,cmap='coolwarm',fmt=".2f",ax=ax)
+
 c.subheader(" 🔄  Correlation Heatmap (High Correlation with Churn)")
 c.pyplot(fig)
+
 with c.expander("🔍 Correlation Heatmap Insights (EDA Summary)"):
     st.markdown("""
                 ##### Observation :
