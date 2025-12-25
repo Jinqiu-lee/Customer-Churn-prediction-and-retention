@@ -179,13 +179,13 @@ with col1:
         
     st.markdown(f"🧪 Using a custom threshold of **{selected_threshold}** to classify churn based on predicted probabilities.")
     if model_option == "logistic_model.joblib" and selected_threshold == 0.3:
-        st.write(" 🧠 When **threshold = 0.2**(recall = 0.94,f1-score = 0.60 for class 1 - churn), **Logistic Regression Model ** performs the best to detect and predict churn!")
+        st.write(" 🧠 When **threshold = 0.3**(recall = 0.94,f1-score = 0.60 for class 1 - churn), **Logistic Regression Model** performs the best to detect and predict churn!")
     elif model_option == "xgb_model.joblib" and selected_threshold == 0.45:
         st.write(" 🧠 When **threshold = 0.45**(recall=0.89,f1-score=0.60 for class 1 - churn), **XGBoost Model** performs the best and balanced to detect churn !")
     elif model_option == "rf_model.joblib" and selected_threshold == 0.25:
         st.write(" 🧠 When **threshold = 0.25**(recall = 0.91,f1-score = 0.61 for class 1-churn),**Random Forest Model** performs the best to detect churn!")
     elif model_option == "mlp_model.joblib" and selected_threshold == 0.3:
-        st.write(" 🧠 When threshold = 0.2(recall = 0.85, f1-score = 0.60 for class 1 - churn),**MLP Model** performs the best ! ")
+        st.write(" 🧠 When threshold = 0.3(recall = 0.85, f1-score = 0.60 for class 1 - churn),**MLP Model** performs the best ! ")
     
     data = {
             "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
