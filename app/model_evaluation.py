@@ -165,7 +165,7 @@ with col1:
         report_df = report_df.round(2)
         report_df = report_df.style.format("{:.2f}", na_rep="")
         report_df.index.name = 'Class / Avg'
-        st.subheader("Classification Report (Detailed)")
+        st.subheader("1. 📣 Classification Report (Detailed)")
         st.dataframe(report_df)
         
     with st.expander("Model Performance Analysis and Explaination"):
@@ -191,18 +191,18 @@ with col1:
 
     # Feature Importance
     if model_option in ["rf_model.joblib","xgb_model.joblib"]:
-        st.subheader(f"Feature Importance of {model_option}")
+        st.subheader(f"2. 📝 Feature Importance of {model_option}")
         importance = pd.DataFrame({
             "Feature": X_test.columns,
             "Importance": model.feature_importances_
         }).sort_values("Importance", ascending=False)
         
         st.bar_chart(importance.set_index("Feature"))
-        st.dataframe(importance.sort_values("Importance", ascending=False).head(10))
+        st.dataframe(importance.sort_values("Importance", ascending=False).head(5))
 
         
     elif model_option in ["logistic_model.joblib"]:
-        st.subheader("Feature Importance of logistic model")
+        st.subheader("2. 📝 Feature Importance of logistic model")
         importance = model.coef_[0]
         feature_importance = pd.DataFrame({
             'Feature':X_test.columns,
@@ -216,7 +216,7 @@ with col1:
     
         
     else:
-        st.subheader("Feature Importance of mlp model")
+        st.subheader("2. 📝 Feature Importance of mlp model")
         result = permutation_importance(model, X_test, y_true, n_repeats=10, random_state=42)
         mlp_importance = pd.DataFrame({
             'Feature':X_test.columns,
@@ -238,7 +238,7 @@ with col1:
         }
     df = pd.DataFrame(data)
     
-    st.subheader("🕴 Estimated Business Impact")
+    st.subheader("3. 🕴 Estimated Business Impact")
     st.markdown("""
                 Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
                 - Save 100s of customers per month(based on the dataset)
@@ -246,30 +246,30 @@ with col1:
                     """)
     st.dataframe(df)
 
-
+    with st.expander("🔍 Insights of📊 Correlation Heatmap &🤖 Model Performance:"):
+        st.markdown("""
+                        ##### 🔍 Insights of📊 Correlation Heatmap &🤖 Model Performance
+                        - 1. Combine with the Data Exploration(Correlation Heatmap), top correlated feature with churn:
+                           - Contract_Month-to-month (0.41)
+                           - OnlineSecurity and TechSupport(0.34)
+                           - InternetService_Fiber optic(0.31)
+                           - PaymentMethod_Eletronic check(0.30)
+                        - It means the customers with **Month-to-month contract**,**Fiber optic without online security & tech suopport**,**Eletronic check payment**are most likely to churn 
+                        - 2. **Logistic / MLP**  ➡️ top features: tenure, totalcharges 
+                           - Good for long-term customers for trend detection 
+                           - Good for customers where tenure and billing history are strong churn signals ,combine with dependants and internet services
+                        - 3. **Random Forest** ➡️ top features: Contract_Month-to-month,OnlineSecurity_No,TechSupport_No,
+                        - 4. **XGBoost** ➡️ top features: Contract_Month-to-month, InternetService_Fiber optic,TechSupport_No
+                           - Better for behavior-pattern-based churn detection and monthly contract analysis
+                           - Better for New customers with little tenure data
+                        """)
+    st.subheader("4. 🔍 Strategies for a single customer")
     st.markdown("""
-                    ##### 🔍 Insights of📊 Correlation Heatmap &🤖 Model Performance
-                    - 1. Combine with the Data Exploration(Correlation Heatmap), top correlated feature with churn:
-                       - Contract_Month-to-month (0.41)
-                       - OnlineSecurity and TechSupport(0.34)
-                       - InternetService_Fiber optic(0.31)
-                       - PaymentMethod_Eletronic check(0.30)
-                    - It means the customers with **Month-to-month contract**,**Fiber optic without online security & tech suopport**,**Eletronic check payment**are most likely to churn 
-                    - 2. **Logistic / MLP**  ➡️ top features: tenure, totalcharges 
-                       - Good for long-term customers for trend detection 
-                       - Good for customers where tenure and billing history are strong churn signals ,combine with dependants and internet services
-                    - 3. **Random Forest** ➡️ top features: Contract_Month-to-month,OnlineSecurity_No,TechSupport_No,
-                    - 4. **XGBoost** ➡️ top features: Contract_Month-to-month, InternetService_Fiber optic,TechSupport_No
-                       - Better for behavior-pattern-based churn detection and monthly contract analysis
-                       - Better for New customers with little tenure data
-                    """)
-    st.markdown("""
-                    ##### 🔍 Strategies for a single customer
-                    - Step1️⃣ → Model Selection based on profile
-                    - Step2️⃣ → Risk Scoring 
+                    - Step 1️⃣ → Model Selection based on profile
+                    - Step 2️⃣ → Risk Scoring 
                        - Run prediction from chosen model at a **threshold favoring high recall** to catch more potential churners
                        - Example - if the threshold/score curve and classfication report show recall > 0.8 at threshold 0.4, use that for churn alert !
-                    - Step3️⃣ → Targeted Retention Actions
+                    - Step 3️⃣ → Targeted Retention Actions
                        - if high churn risk + **Contract_Month-to-month** → Offer annual contract discount to upgrade
                        - if **InternerService_Fiber optic with OnlineSecurity_No & TechSupport_No** → Offer free trial for these services and discount for InternetService package
                        - if **Eletronic check payment** → Offer incentives to switch to auto-pay, add multiple payment reminder
