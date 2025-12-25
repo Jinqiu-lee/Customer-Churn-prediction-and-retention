@@ -37,6 +37,7 @@ if show_processed:
             
                 
 c = st.container()  
+st.markdown("---")
 c.subheader("EDA --- Customer Churn")
 churn_count = raw_data['Churn'].value_counts().reset_index()
 churn_count.columns = ['Churn','Count']
@@ -65,6 +66,7 @@ with c.expander("🛠️ How I will address it ："):
                 """)
             
 c = st.container() 
+st.markdown("---")
 c.subheader(" EDA  --- Features Impacting Customer Churn")
 c.markdown("##### 👩🏻‍💻 High Priority Features for Churn --- Contract,MontlyCharges")
     
@@ -108,6 +110,7 @@ with c.expander(" 🔎 Insight and Strategies from Contract Type and MonthlyChag
 
 
 c = st.container()
+st.markdown("---")
 c.markdown("#### 👩🏻‍💻 High Priority Features for Churn --- Tenure")
 raw_data['TenureGroup'] = pd.cut(raw_data['tenure'], bins=[0, 12, 24, 48, 72], labels=['<1yr', '1-2yr', '2-4yr', '4-6yr'])      
 
@@ -157,7 +160,7 @@ with c.expander(" 🔎 Insights and Strategies from Tenure: "):
                 - For 4-6yrs Churners customers ,focus on why they pay much higher price (Q1), maybe other service they are using are not satisfied. Offer **customized service/support** to maintain their satifaction and loyalty 
                 """)
 
-
+st.markdown("---")
 c = st.container()
 c.markdown("#### 👩🏻‍💻 High Priority Features for Churn --- InternetService")
 
@@ -209,7 +212,7 @@ with c.expander(" 🔎 Insight and Strategies with InternetService per MonthlyCh
                 """)
 
     
-
+st.markdown("---")
 st.markdown("#### 👩🏻‍💻 High Priority Features for Churn --- PaymentMethod and PaperlessBilling")
 c = st.container()  
 
@@ -247,7 +250,7 @@ with c.expander(" 🔎 Insights and Strategies from PaperlessBilling and Payment
                 - Offer 20% **discount or additional InternetService package** for them to **upgrade to yearly contract**, offer incentives for **auto-pay and stay** (for convenience), add multiple **payment reminder**.
                 """)
 
-
+st.markdown("---")
 st.markdown("#### 👩🏻‍💻 High Priority Features for Churn --- Dependents")
 c = st.container()
 
@@ -276,7 +279,7 @@ with c.expander(" 🔍 Insights and Strategies for Dependents or Non-dependents"
                 - For new Dependents : Provide promotion of **yearly family plan** with different service packages, to keep convenience and commitment.
                 - For current Non-dependents: Offer 30% discount to upgrade to yearly plan with auto-pay, also provide discount for multiple service_combo, promote DSL.
                 """) 
-    
+st.markdown("---") 
 st.markdown("#### 👩🏻‍💻 High Priority Features for Churn --- Partner")
 c = st.container()    
 churn_rate_partner = raw_data.groupby('Partner')['Churn'].mean().reset_index()
@@ -304,7 +307,7 @@ with c.expander(" 🔍 Insights and Strategies for Customers with or without Par
                 """)
 
 
-
+st.markdown("---")
 c = st.container()
 correlation = processed_data.corr()
         
@@ -315,7 +318,6 @@ filterd_corr = processed_data[high_corr].corr()
 
 fig ,ax = plt.subplots(figsize =(10,6))
 sns.heatmap(filterd_corr,annot=True,cmap='coolwarm',fmt=".2f",ax=ax)
-
 c.subheader(" 🔄  Correlation Heatmap (High Correlation with Churn)")
 c.pyplot(fig)
 
