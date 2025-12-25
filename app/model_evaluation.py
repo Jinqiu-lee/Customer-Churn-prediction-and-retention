@@ -187,21 +187,6 @@ with col1:
     elif model_option == "mlp_model.joblib" and selected_threshold == 0.3:
         st.write(" 🧠 When threshold = 0.3(recall = 0.85, f1-score = 0.60 for class 1 - churn),**MLP Model** performs the best ! ")
     
-    data = {
-            "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
-            "Risk Customers ":[0,200,300],
-            "Real Churners Saved":[0,148,252],
-            "Estimated Revenue Saved":["$0","$14,800","$25,200"]
-        }
-    df = pd.DataFrame(data)
-    
-    st.subheader("🕴 Estimated Business Impact")
-    st.markdown("""
-                Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
-                - Save 100s of customers per month(based on the dataset)
-                - Improve revenue predictability (based on the recall result and assume 100$ revenue per customer)
-                    """)
-    st.dataframe(df)
    
 
     # Feature Importance
@@ -243,6 +228,25 @@ with col1:
         mlp_importance = mlp_importance.sort_values(by='AbsImportance',ascending=False)
         st.bar_chart(mlp_importance.set_index('Feature')['Importance'])
         st.dataframe(mlp_importance.sort_values('AbsImportance',ascending=False).head(10))
+
+
+    data = {
+            "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
+            "Risk Customers ":[0,200,300],
+            "Real Churners Saved":[0,148,252],
+            "Estimated Revenue Saved":["$0","$14,800","$25,200"]
+        }
+    df = pd.DataFrame(data)
+    
+    st.subheader("🕴 Estimated Business Impact")
+    st.markdown("""
+                Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
+                - Save 100s of customers per month(based on the dataset)
+                - Improve revenue predictability (based on the recall result and assume 100$ revenue per customer)
+                    """)
+    st.dataframe(df)
+
+
     st.markdown("""
                     ##### 🔍 Insights of📊 Correlation Heatmap &🤖 Model Performance
                     - 1. Combine with the Data Exploration(Correlation Heatmap), top correlated feature with churn:
