@@ -189,6 +189,7 @@ with col1:
     
    
 
+    st.markdown("---")
     # Feature Importance
     if model_option in ["rf_model.joblib","xgb_model.joblib"]:
         st.subheader(f"2. 📝 Feature Importance of {model_option}")
@@ -255,7 +256,9 @@ with col1:
             "Estimated Revenue Saved":["$0","$14,800","$25,200"]
         }
     df = pd.DataFrame(data)
-    
+
+
+    st.markdown("---")
     st.subheader("3. 📌 Estimated Business Impact")
     st.markdown("""
                 Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
@@ -265,6 +268,7 @@ with col1:
     st.dataframe(df)
 
     
+    st.markdown("---")
     st.subheader("4. 🎯 Strategies for a single customer")
     st.markdown("""
                     - Step 1️⃣ → Model Selection based on profile
