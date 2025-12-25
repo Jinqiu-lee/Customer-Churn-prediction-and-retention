@@ -35,9 +35,9 @@ if show_processed:
         st.write("##### Data Shape:",processed_data.shape)
 
             
-                
-c = st.container()  
+
 st.markdown("---")
+c = st.container()  
 c.subheader("EDA --- Customer Churn")
 churn_count = raw_data['Churn'].value_counts().reset_index()
 churn_count.columns = ['Churn','Count']
@@ -109,8 +109,8 @@ with c.expander(" 🔎 Insight and Strategies from Contract Type and MonthlyChag
             """)
 
 
-c = st.container()
 st.markdown("---")
+c = st.container()
 c.markdown("#### 👩🏻‍💻 High Priority Features for Churn --- Tenure")
 raw_data['TenureGroup'] = pd.cut(raw_data['tenure'], bins=[0, 12, 24, 48, 72], labels=['<1yr', '1-2yr', '2-4yr', '4-6yr'])      
 
@@ -159,6 +159,7 @@ with c.expander(" 🔎 Insights and Strategies from Tenure: "):
                 - For < 1 yr New customers , might be commitment issue, price issue, service unsatisfied with competitors etc, focus on **increase their stickness and commmitment**, offer **discount for yearly contract** and provide automatic service as bonus for convenience/stickness 
                 - For 4-6yrs Churners customers ,focus on why they pay much higher price (Q1), maybe other service they are using are not satisfied. Offer **customized service/support** to maintain their satifaction and loyalty 
                 """)
+
 
 st.markdown("---")
 c = st.container()
