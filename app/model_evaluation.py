@@ -128,7 +128,7 @@ with col1:
         report_df = report_df.round(2)
         report_df = report_df.style.format("{:.2f}", na_rep="")
         report_df.index.name = 'Class / Avg'
-        st.subheader("Classification Report (Detailed)")
+        st.subheader("1. 📣 Classification Report (Detailed)")
         st.dataframe(report_df)
     
     else:
@@ -212,7 +212,7 @@ with col1:
         feature_importance = feature_importance.sort_values(by='AbsImportance',ascending=False)
         
         st.bar_chart(feature_importance.set_index('Feature')['Importance'])
-        st.dataframe(feature_importance.sort_values('AbsImportance',ascending=False).head(10))
+        st.dataframe(feature_importance.sort_values('AbsImportance',ascending=False).head(5))
     
         
     else:
@@ -227,26 +227,10 @@ with col1:
         mlp_importance['AbsImportance'] = mlp_importance['Importance'].abs()
         mlp_importance = mlp_importance.sort_values(by='AbsImportance',ascending=False)
         st.bar_chart(mlp_importance.set_index('Feature')['Importance'])
-        st.dataframe(mlp_importance.sort_values('AbsImportance',ascending=False).head(10))
+        st.dataframe(mlp_importance.sort_values('AbsImportance',ascending=False).head(5))
 
 
-    data = {
-            "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
-            "Risk Customers ":[0,200,300],
-            "Real Churners Saved":[0,148,252],
-            "Estimated Revenue Saved":["$0","$14,800","$25,200"]
-        }
-    df = pd.DataFrame(data)
-    
-    st.subheader("3. 🕴 Estimated Business Impact")
-    st.markdown("""
-                Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
-                - Save 100s of customers per month(based on the dataset)
-                - Improve revenue predictability (based on the recall result and assume 100$ revenue per customer)
-                    """)
-    st.dataframe(df)
-
-    with st.expander("🔍 Insights of📊 Correlation Heatmap &🤖 Model Performance:"):
+    with st.expander("🔍 Correlation Heatmap & Model Performance:"):
         st.markdown("""
                         ##### 🔍 Insights of📊 Correlation Heatmap &🤖 Model Performance
                         - 1. Combine with the Data Exploration(Correlation Heatmap), top correlated feature with churn:
@@ -263,7 +247,25 @@ with col1:
                            - Better for behavior-pattern-based churn detection and monthly contract analysis
                            - Better for New customers with little tenure data
                         """)
-    st.subheader("4. 🔍 Strategies for a single customer")
+
+    data = {
+            "Scenario":["No model","Top 20% Risk Customers","Top 30% Risk Customers"],
+            "Risk Customers ":[0,200,300],
+            "Real Churners Saved":[0,148,252],
+            "Estimated Revenue Saved":["$0","$14,800","$25,200"]
+        }
+    df = pd.DataFrame(data)
+    
+    st.subheader("3. 📌 Estimated Business Impact")
+    st.markdown("""
+                Even with the imperfect precision, if our model catches 70% of churners, company can offer **early retention deals** to the 30% churn-risk customers , that could:
+                - Save 100s of customers per month(based on the dataset)
+                - Improve revenue predictability (based on the recall result and assume 100$ revenue per customer)
+                    """)
+    st.dataframe(df)
+
+    
+    st.subheader("4. 🎯 Strategies for a single customer")
     st.markdown("""
                     - Step 1️⃣ → Model Selection based on profile
                     - Step 2️⃣ → Risk Scoring 
