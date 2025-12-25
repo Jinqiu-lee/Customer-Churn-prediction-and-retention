@@ -33,29 +33,7 @@ if show_raw:
 if show_processed:
         st.write(processed_data)
         st.write("##### Data Shape:",processed_data.shape)
-        c = st.container()
-        correlation = processed_data.corr()
-        
-        # Filter only columns that correlate with 'Churn' above a threshold (e.g., |corr| > 0.2)
-        churn_corr = correlation['Churn'].sort_values(ascending=False)
-        high_corr = churn_corr[churn_corr > 0.2].index
-        filterd_corr = processed_data[high_corr].corr()
-        
-        fig ,ax = plt.subplots(figsize =(10,6))
-        sns.heatmap(filterd_corr,annot=True,cmap='coolwarm',fmt=".2f",ax=ax)
-        c.subheader(" 🔄  Correlation Heatmap (High Correlation with Churn)")
-        c.pyplot(fig)
-        with c.expander("🔍 Correlation Heatmap Insights (EDA Summary)"):
-            st.markdown("""
-                        ##### Observation :
-                        - 📄 Contract_Month-to-month (0.41)
-                        - 🔐 OnlineSecurity_No and 🛠️ TechSupport_No (both at 0.34)
-                        - 🌐 InternetService_Fiber optic (0.31)
-                        - 💳 PaymentMethod_Electronic check (0.30)
-                        ##### Insights :
-                        These findings show that a **Month-to-month** customer,with **Fiber optic InternetService** but **lacking security or support services**, or with **Eletronic check payments** are mostly likely to churn.
-                        These findings combine with the raw data EDA, reinforces the importance of **service offerings and price dissatisfaction** and **payment flexibility** in customer retention strategies
-                        """)
+
             
                 
 c = st.container()  
@@ -323,5 +301,30 @@ with c.expander(" 🔍 Insights and Strategies for Customers with or without Par
                 ##### Strategies 
                 - For new customers with partner: Provide promotion of **yearly family plan** with multiple service choices, promote DSL
                 - Still need to focus more on **Month-to-month Customers**: Offer 20% discount to upgrade to yearly plan with auto_pay, promote DSL for customer without InternetService, offer 30% discount Service_combo for Current Fiber optic customers
+                """)
+
+
+c = st.container()
+correlation = processed_data.corr()
+        
+# Filter only columns that correlate with 'Churn' above a threshold (e.g., |corr| > 0.2)
+churn_corr = correlation['Churn'].sort_values(ascending=False)
+high_corr = churn_corr[churn_corr > 0.2].index
+filterd_corr = processed_data[high_corr].corr()
+
+fig ,ax = plt.subplots(figsize =(10,6))
+sns.heatmap(filterd_corr,annot=True,cmap='coolwarm',fmt=".2f",ax=ax)
+c.subheader(" 🔄  Correlation Heatmap (High Correlation with Churn)")
+c.pyplot(fig)
+with c.expander("🔍 Correlation Heatmap Insights (EDA Summary)"):
+    st.markdown("""
+                ##### Observation :
+                - 📄 Contract_Month-to-month (0.41)
+                - 🔐 OnlineSecurity_No and 🛠️ TechSupport_No (both at 0.34)
+                - 🌐 InternetService_Fiber optic (0.31)
+                - 💳 PaymentMethod_Electronic check (0.30)
+                ##### Insights :
+                These findings show that a **Month-to-month** customer,with **Fiber optic InternetService** but **lacking security or support services**, or with **Eletronic check payments** are mostly likely to churn.
+                These findings combine with the raw data EDA, reinforces the importance of **service offerings and price dissatisfaction** and **payment flexibility** in customer retention strategies
                 """)
 
