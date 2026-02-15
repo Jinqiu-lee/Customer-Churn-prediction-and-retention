@@ -11,8 +11,4 @@ __pycache__/
 data/
 *.csv
 
-model/
-*.joblib
-*.pkl
-
 .streamlit/
