@@ -105,12 +105,12 @@ def train(model_name):
         evaluate_model(model,X_test2,y_test2)
     elif model_name == "rf" or model_name =="xgb":
         evaluate_model(model,X_test,y_test)
+        
           
-    #os.makedirs("./model/new_saved_model", exist_ok=True)
-
-    dump(model,f"./model/new_saved_model/{model_name}_model.joblib")
-    # print(f"Model saved to: model/saved_model/{model_name}_model.joblib")
-    
+    #os.makedirs("./model/new_trained_model", exist_ok=True)
+    #dump(model,f"./model/new_trained_model/{model_name}_model.joblib")
+   
+    #print(f"Model saved to: model/new_trained_model/{model_name}_model.joblib")
     
 # making the script executable from the command line    
 
@@ -127,4 +127,5 @@ if __name__ == "__main__":   # only run the followig code if this line is excute
     # if run : python train_models.py --model logistic in bash , it shows args.model =="logistic" in python
 
     train(args.model)   # calls the train() function using the model specified from the command line 
+    
     

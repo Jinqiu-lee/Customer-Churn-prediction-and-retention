@@ -83,7 +83,7 @@ with col1:
     fig = px.histogram(raw_data,
                         x='Contract',color='Churn',barmode='stack',
                         title='Churn by Contract Type')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
     with st.expander("Churn Percentage by contract type"):
         st.write(f"Month-to-month:{churn_pct1[1]}%")
         st.write(f"One year :{churn_pct2[1]}%")
@@ -92,12 +92,12 @@ with col1:
 with col2:
     fig = px.box(raw_data,x='Churn',y='MonthlyCharges',
                     title="MonthlyCharges vs. Churn")
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
             
 with col3:
     fig = px.box(raw_data,x='Contract',y='MonthlyCharges',
                     title="MonthlyCharges & Contract Combo vs. Churn")
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
         
 with c.expander(" 🔎 Insight and Strategies from Contract Type and MonthlyChagres: "):  
     st.markdown("""
@@ -133,12 +133,12 @@ churn_rate4 = (churn_count4 /churn_count4.sum()*100).round(2)
 col1, col2 = c.columns([2,2])
 with col1:
     fig = px.box(raw_data,x='Churn',y='tenure',title="Tenure vs. Churn")
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
 
 with col2:
     fig = px.histogram(raw_data,x='TenureGroup',color='Churn',barmode='group',
                         title='Churn by TenureGroup')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
     with st.expander("Churn Rate by differentiate Tenure groups:"):
         st.write(f"< 1 yr : {churn_rate1[1]}%")
         st.write(f"1-2 yrs : {churn_rate2[1]}%")
@@ -173,7 +173,7 @@ combo_churn = raw_data.groupby('Service_combo')['Churn'].mean().reset_index()
 col1,col2= c.columns([2,2])
 with col1:
     fig = px.histogram(raw_data,color='Churn',x='InternetService',barmode='stack',title='InternetService vs.Churn')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
     
 with col2:
     fig = px.bar(combo_churn,x='Service_combo',y='Churn',
@@ -181,7 +181,7 @@ with col2:
                     color_continuous_scale='Viridis',
                     title="Churn Rates vs. Service Combination")
         
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
 
 describe_df_service = raw_data.groupby(['InternetService', 'Churn'],observed=True)['Service_combo'].describe()
 describe_df_contract = raw_data.groupby(['InternetService', 'Churn'],observed=True)['Contract'].describe()
@@ -220,18 +220,18 @@ c = st.container()
 col1,col2 = c.columns([2,2])
 with col1:
     fig1= px.histogram(raw_data,x='Churn',y='PaymentMethod',title='PaymentMethod vs. Churn %')
-    st.plotly_chart(fig1,use_container_width=True)
+    st.plotly_chart(fig1,width='stretch')
 with col2:
     fig2 = px.histogram(raw_data,x='Churn',y='PaperlessBilling',title='PaperlessBilling vs. Churn %')
-    st.plotly_chart(fig2,use_container_width=True)
+    st.plotly_chart(fig2,width='stretch')
     
 col3,col4 = c.columns([2,2])
 with col3:    
     fig3 = px.histogram(raw_data,x='Contract',color='PaymentMethod',title='Contract type vs. PaymentMethod')
-    st.plotly_chart(fig3,use_container_width=True)
+    st.plotly_chart(fig3,width='stretch')
 with col4:
     fig4 = px.histogram(raw_data,x='Contract',color='PaperlessBilling',title='Contract type vs. PaperlessBilling')
-    st.plotly_chart(fig4,use_container_width=True)
+    st.plotly_chart(fig4,width='stretch')
     
 col5,col6 = c.columns([2,2])
 with col5:
@@ -261,15 +261,15 @@ churn_rate_dependent['Churn_rate'] = churn_rate_dependent['Churn']
 col1,col2,col3= c.columns([2,2,2])
 with col1:
     fig = px.histogram(churn_rate_dependent,x='Dependents',y='Churn_rate',title='Dependents vs. Churn rate')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
     
 with col2:
     fig = px.histogram(raw_data,x='Contract',color='Dependents',title='Dependents vs. Contract')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
 
 with col3:
     fig = px.box(raw_data,x='Dependents',y='MonthlyCharges',title='Dependents vs. MonthlyCharges')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
     
     
 with c.expander(" 🔍 Insights and Strategies for Dependents or Non-dependents"):
@@ -289,13 +289,13 @@ churn_rate_partner['Churn_rate'] = churn_rate_partner['Churn']
 col1,col2,col3= c.columns([2,2,2])
 with col1:
     fig = px.histogram(churn_rate_partner,x='Partner',y='Churn_rate',title='Partner vs. Churn')
-    st.plotly_chart(fig,use_container_width=True)    
+    st.plotly_chart(fig,width='stretch')    
 with col2:
     fig = px.histogram(raw_data,x='Contract',color='Partner',title='Partner vs. Contract')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
 with col3:
     fig = px.box(raw_data,x='Partner',y='MonthlyCharges',title='Partner vs. MonthlyCharges')
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
         
 with c.expander(" 🔍 Insights and Strategies for Customers with or without Partner"):
     st.markdown("""

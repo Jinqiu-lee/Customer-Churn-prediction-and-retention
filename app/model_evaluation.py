@@ -21,10 +21,10 @@ X_scaled_train,X_scaled_test,y_train,y_test = scaled(save_test_csv=True)
 def load_model(path):
     return joblib.load(path)
 
-rf_model = load_model("./model/new_saved_model/rf_model.joblib")
-logistic_model = load_model("./model/new_saved_model/logistic_model.joblib")
-mlp_model = load_model("./model/new_saved_model/mlp_model.joblib")
-xgb_model = load_model("./model/new_saved_model/xgb_model.joblib")
+rf_model = load_model("./model/new_trained_model/rf_model.joblib")
+logistic_model = load_model("./model/new_trained_model/logistic_model.joblib")
+mlp_model = load_model("./model/new_trained_model/mlp_model.joblib")
+xgb_model = load_model("./model/new_trained_model/xgb_model.joblib")
 
 # Upload test data 
 @st.cache_data
@@ -49,7 +49,7 @@ with col1:
         "mlp_model.joblib",  
         ])
 
-    model_path = f"./model/new_saved_model/{model_option}"
+    model_path = f"./model/new_trained_model/{model_option}"
     
      # Load model
     @st.cache_resource
@@ -121,7 +121,7 @@ with col1:
         ax[1].set_title("Threshold vs Precision, Recall, F1")
         ax[1].legend()
         
-        st.pyplot(fig,use_container_width=False)
+        st.pyplot(fig,width='content')
         
         report_dict = classification_report(y_true, y_pred_sel,output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
@@ -158,7 +158,7 @@ with col1:
         ax[1].set_title("Threshold vs Precision, Recall, F1")
         ax[1].legend()
         
-        st.pyplot(fig,use_container_width=False)
+        st.pyplot(fig,width='content')
 
         report_dict = classification_report(y_true, y_pred_sel,output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
@@ -377,10 +377,10 @@ with col2:
     ("Logistic", "Random Forest", "XGBoost", "MLP")
 )
     model_paths = {
-    "Logistic": "./model/new_saved_model/logistic_model.joblib",
-    "Random Forest":"./model/new_saved_model/rf_model.joblib",
-    "XGBoost": "./model/new_saved_model/xgb_model.joblib",
-    "MLP": "./model/new_saved_model/mlp_model.joblib",
+    "Logistic": "./model/new_trained_model/logistic_model.joblib",
+    "Random Forest":"./model/new_trained_model/rf_model.joblib",
+    "XGBoost": "./model/new_trained_model/xgb_model.joblib",
+    "MLP": "./model/new_trained_model/mlp_model.joblib",
 }
     
     model = joblib.load(model_paths[model_choice])
