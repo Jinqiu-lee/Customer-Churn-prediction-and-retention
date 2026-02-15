@@ -8,3 +8,4 @@ matplotlib==3.10.3
 joblib==1.5.1
 imbalanced-learn==0.13.0
 streamlit
+altair==4.2.2
