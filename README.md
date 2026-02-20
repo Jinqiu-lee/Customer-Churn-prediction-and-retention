@@ -1,72 +1,52 @@
 # Customer Churn Prediction System
 
-## Turning Customer Data into Retention Decisions
+### 1. Determine Business Problem
 
+Customer churn is expensive, acquiring new customers costs 5X more than retaining existing ones. This system helps subscription businesses answer:
+    - Which customers are likely to leave ?
+    - Why are they leaving ?
+    - What can we do about it ?
 
-### 1. Determin the Business Problem .
-### Declining subscriptions or customer decline: 
-    - Which customers are likely to leave — and why?”
-    - The relationship between subscriber profiles and subscription volume)
+### 2. What This System Delivers:
 
+For every customer profile you choose, you get:
+    - Churn Probability – How likely they are to leave
+    - Key Drivers – The specific factors putting them at risk
+    - Retention Strategy – Actionable next steps
     
-### 2. Business Impact
-### This system helps businesses:
-  - Identify customers most at risk of leaving
-  - Understand why they might churn
-  - Prioritize who to save
-  - Allocate retention budget/strategy on them more effectively
+### 3. Business Impact:
+    - Identify at-risk customers before they leave
+    - Understand why they're at risk
+    - Focus retention budget where it matters most
+    - Move from reactive to proactive retention
 
 
-### 3. The Solution
-### I built an churn prediction system that:
-  - Self-tune the parameters to choose the ML model based on customer profile, to predict which customers are likely to churn
-  - Returns the churn probability
-  - Explains what factors are driving their risk
-  - Compares different models to ensure reliable decisions.
-  - Retention strategy suggestions. 
+### 4. How It Works? 
+1. Customer data (contract type, tenure, services used etc.) is analyzed
+2. Patterns are identified from past customers who churned vs. stayed
+3. Multiple ML models predict churn risk for current customers
+4. Clear explanations show what's driving each prediction
 
-This turns raw customer data into clear, actionable business insights, because gaining new customers are 5X more expensive than retent existed customer
+### 5. What Makes This system Different ? 
 
-
-### 4. What This System Delivers: 
-For every customer, the system provide 
-1. Churn probability ---- How likely a given customer is to leave
-2. Churn reasons ---- Data Exploration page clearly showed the visulization and explanation. 
-3. Main drivers ---- Why this customer is predicted to churn
-
-
-### 5. How It Works ?
-1. Customer data (contract type, tenure, service-type etc.) is analyzed
-2. Data Analytic page explored patterns who's in high risk of churn, and model page(4 models) learned patterns from past customers who left or stayed
-3. Models predicts churn risk for current customers
-4. Explanations show which factors influence each prediction
-
-
-### 6. What Makes This Project Better than Typical Models?
-Most churn models only output: “This customer will churn.”
-This system instead provides:
-  - Four models (Logistic Regression & XGBoost & Ramdon Forest & MLP)
-    - Probability scores, not just yes/no
-    - Threshold calibration to match business risk tolerance
-    - SHAP explanations to show why each prediction happens
+Most models just say "this customer will churn." This system gives you:
+- Probability risk scores (not just yes/no)
+- Why each prediction was made
+- Strategy suggestions based on the customer's situation
 
 This makes it suitable for real decision-making, not just experimentation.
 
-### 7. Who It Is For ? 
+### 6. Who Can Use This ?
+Any business with recurring customers:
 1. Subscription businesses
 2. SaaS companies
-3. Telecom 
-4. E-commerce & loyalty programs
-5. Any company with recurring customers, of you have customer data, this system can turn it into a retention strategy.
+3. Telecom providers
+4. E-commerce with loyalty programs
+   
 
-### 8. Demo & How to Use ?
-The project includes:
-  - Trained machine learning models
-  - A Streamlit dashboard with data exploration page and model page 
-  - Data pipelines
-
-You can:
+### 7. How to Use ?
+The system includes an interactive dashboard where you can:
   - See top 5 churn-driven factors
-  - Choose customer's profile customer data
+  - Choose customer's profile
   - View churn risk
-  - Know why they are at risk and what the retention strategy should take
+  - Know why they are at risk and get retention recommendations
